@@ -1,7 +1,15 @@
-export default function Home() {
-  return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      hello
-    </main>
-  );
-}
+import { AuthForm } from "@/components/Auth-form";
+import React from "react";
+import { auth } from "@/lib/auth";
+import { redirect } from "next/navigation";
+
+const page = async () => {
+  const session = await auth();
+
+  if (session?.user && session) {
+    redirect("/home");
+  }
+  return <AuthForm />;
+};
+
+export default page;
