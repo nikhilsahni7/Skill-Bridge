@@ -9,5 +9,5 @@ export async function doLogout() {
 export async function doSocialLogin(formData: any) {
   const action = formData.get("action");
 
-  await signIn(action, { redirectTo: "/home" });
+  await signIn(action, { redirectTo: "/onboarding" });
 }

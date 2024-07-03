@@ -1,3 +1,6 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
@@ -6,7 +9,6 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
-
 
 model Account {
   id                 String  @id @default(cuid())
@@ -44,12 +46,18 @@ model User {
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
   image         String?
-  password      String? @map("password")
+  password      String?   @map("password")
   accounts      Account[]
   sessions      Session[]
+  userType      UserType?
+  client        ClientProfile?
+  freelancer    FreelancerProfile?
+  projects      Project[]
+  proposals     Proposal[]
+  reviews       Review[]
+  sentMessages  Message[] @relation("SentMessages")
+  receivedMessages Message[] @relation("ReceivedMessages")
   
-
- 
   @@map("users")
 }
  
@@ -60,4 +68,123 @@ model VerificationToken {
  
   @@unique([identifier, token])
   @@map("verificationtokens")
+}
+
+enum UserType {
+  CLIENT
+  FREELANCER
+}
+model ClientProfile {
+  id            String @id @default(cuid())
+  userId        String @unique
+  user          User   @relation(fields: [userId], references: [id])
+  companyName   String
+  industry      String?
+  description   String?
+  website       String?
+  location      String?
+  phoneNumber   String?
+  projectsPosted Project[]
+}
+
+model FreelancerProfile {
+  id            String @id @default(cuid())
+  userId        String @unique
+  user          User   @relation(fields: [userId], references: [id])
+  title         String
+  skills        String[]
+  experienceLevel String
+  education     String?
+  certifications String[]
+  hourlyRate    Float
+  availability  Availability
+  portfolio     Portfolio?
+}
+
+model Portfolio {
+  id               String @id @default(cuid())
+  freelancerId     String @unique
+  freelancer       FreelancerProfile @relation(fields: [freelancerId], references: [id])
+  projects         PortfolioProject[]
+}
+
+model PortfolioProject {
+  id               String @id @default(cuid())
+  portfolioId      String
+  portfolio        Portfolio @relation(fields: [portfolioId], references: [id])
+  title            String
+  description      String
+  imageUrl         String?
+  projectUrl       String?
+}
+
+enum Availability {
+  FULL_TIME
+  PART_TIME
+  CONTRACT
+  HOURLY
+}
+
+model Project {
+  id              String @id @default(cuid())
+  title           String
+  description     String
+  clientId        String
+  client          User   @relation(fields: [clientId], references: [id])
+  clientProfileId String
+  clientProfile   ClientProfile @relation(fields: [clientProfileId], references: [id])
+  budget          Float
+  deadline        DateTime?
+  status          ProjectStatus @default(OPEN)
+  category        String
+  skills          String[]
+  proposals       Proposal[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+enum ProjectStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+model Proposal {
+  id          String @id @default(cuid())
+  projectId   String
+  project     Project @relation(fields: [projectId], references: [id])
+  freelancerId String
+  freelancer  User   @relation(fields: [freelancerId], references: [id])
+  coverLetter String
+  bidAmount   Float
+  deliveryTime Int
+  status      ProposalStatus @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+}
+
+model Review {
+  id          String @id @default(cuid())
+  reviewerId  String
+  reviewer    User   @relation(fields: [reviewerId], references: [id])
+  rating      Int
+  comment     String?
+  createdAt   DateTime @default(now())
+}
+
+model Message {
+  id          String @id @default(cuid())
+  senderId    String
+  sender      User   @relation("SentMessages", fields: [senderId], references: [id])
+  receiverId  String
+  receiver    User   @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  content     String
+  createdAt   DateTime @default(now())
 }

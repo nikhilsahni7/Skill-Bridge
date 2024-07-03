@@ -7,7 +7,7 @@ const page = async () => {
   const session = await auth();
 
   if (session?.user && session) {
-    redirect("/home");
+    redirect("/onboarding");
   }
   return <AuthForm />;
 };
