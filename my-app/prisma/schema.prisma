@@ -49,8 +49,8 @@ model User {
   password      String?   @map("password")
   accounts      Account[]
   sessions      Session[]
-  userType      UserType?
-  client        ClientProfile?
+  userType      UserType? 
+  client        ClientProfile? 
   freelancer    FreelancerProfile?
   projects      Project[]
   proposals     Proposal[]

@@ -1,15 +1,27 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { FaBriefcase, FaUserTie } from "react-icons/fa";
+import Logout from "@/components/Logout";
 
 export default function OnboardingPage() {
   const [userType, setUserType] = useState<"CLIENT" | "FREELANCER" | null>(
     null
   );
   const router = useRouter();
+
+  useEffect(() => {
+    const checkUserProfile = async () => {
+      const response = await fetch("/api/user/type");
+      const data = await response.json();
+      if (data.userType) {
+        router.push("/dashboard");
+      }
+    };
+    checkUserProfile();
+  }, [router]);
 
   const handleContinue = async () => {
     if (userType) {
@@ -108,6 +120,7 @@ export default function OnboardingPage() {
               >
                 Get Started
               </Button>
+              <Logout />
             </motion.div>
           </div>
         </div>
