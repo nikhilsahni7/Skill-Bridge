@@ -23,6 +23,13 @@ import {
 } from "@/components/ui/form";
 import { motion } from "framer-motion";
 
+const portfolioProjectSchema = z.object({
+  id: z.string().optional(),
+  title: z.string().min(1, "Project title is required"),
+  description: z.string().min(1, "Project description is required"),
+  projectUrl: z.string().url("Invalid URL").optional().or(z.literal("")),
+});
+
 const freelancerProfileSchema = z.object({
   title: z.string().min(2, "Professional title is required"),
   skills: z.array(z.string()).min(1, "At least one skill is required"),
@@ -31,6 +38,7 @@ const freelancerProfileSchema = z.object({
   certifications: z.array(z.string()).optional(),
   hourlyRate: z.coerce.number().min(1, "Hourly rate must be at least 1"),
   availability: z.enum(["FULL_TIME", "PART_TIME", "CONTRACT", "HOURLY"]),
+  portfolio: z.array(portfolioProjectSchema).optional().default([]),
 });
 
 type FreelancerProfileForm = z.infer<typeof freelancerProfileSchema>;
@@ -38,14 +46,17 @@ type FreelancerProfileForm = z.infer<typeof freelancerProfileSchema>;
 export default function EditFreelancerProfileForm({
   initialProfile,
 }: {
-  initialProfile: FreelancerProfileForm;
+  initialProfile: Partial<FreelancerProfileForm>;
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
   const form = useForm<FreelancerProfileForm>({
     resolver: zodResolver(freelancerProfileSchema),
-    defaultValues: initialProfile,
+    defaultValues: {
+      ...initialProfile,
+      portfolio: initialProfile.portfolio || [],
+    },
   });
 
   const onSubmit = async (data: FreelancerProfileForm) => {
@@ -105,7 +116,7 @@ export default function EditFreelancerProfileForm({
                 <FormControl>
                   <Input
                     {...field}
-                    value={field.value.join(", ")}
+                    value={field.value?.join(", ") || ""}
                     onChange={(e) =>
                       field.onChange(
                         e.target.value.split(",").map((skill) => skill.trim())
@@ -224,6 +235,86 @@ export default function EditFreelancerProfileForm({
                     <SelectItem value="HOURLY">Hourly</SelectItem>
                   </SelectContent>
                 </Select>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="portfolio"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Portfolio Projects</FormLabel>
+                <FormControl>
+                  <div className="space-y-4">
+                    {(field.value || []).map((project, index) => (
+                      <div
+                        key={project.id || index}
+                        className="space-y-2 p-4 border rounded"
+                      >
+                        <Input
+                          placeholder="Project Title"
+                          value={project.title}
+                          onChange={(e) => {
+                            const newPortfolio = [...field.value];
+                            newPortfolio[index].title = e.target.value;
+                            field.onChange(newPortfolio);
+                          }}
+                          className="border-gray-300 focus:border-blue-500"
+                        />
+                        <Input
+                          placeholder="Project Description"
+                          value={project.description}
+                          onChange={(e) => {
+                            const newPortfolio = [...field.value];
+                            newPortfolio[index].description = e.target.value;
+                            field.onChange(newPortfolio);
+                          }}
+                          className="border-gray-300 focus:border-blue-500"
+                        />
+                        <Input
+                          placeholder="Project URL or GitHub (optional)"
+                          value={project.projectUrl || ""}
+                          onChange={(e) => {
+                            const newPortfolio = [...field.value];
+                            newPortfolio[index].projectUrl = e.target.value;
+                            field.onChange(newPortfolio);
+                          }}
+                          className="border-gray-300 focus:border-blue-500"
+                        />
+                        <Input
+                          type="hidden"
+                          value={project.id || ""}
+                          onChange={() => {}} // This field shouldn't change
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          onClick={() => {
+                            const newPortfolio = field.value.filter(
+                              (_, i) => i !== index
+                            );
+                            field.onChange(newPortfolio);
+                          }}
+                        >
+                          Remove Project
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </FormControl>
+                <Button
+                  type="button"
+                  onClick={() =>
+                    field.onChange([
+                      ...(field.value || []),
+                      { title: "", description: "", projectUrl: "" },
+                    ])
+                  }
+                  className="mt-2"
+                >
+                  Add Project
+                </Button>
                 <FormMessage />
               </FormItem>
             )}

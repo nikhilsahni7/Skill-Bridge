@@ -58,6 +58,7 @@ model User {
   sentMessages  Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
   
+  
   @@map("users")
 }
  
