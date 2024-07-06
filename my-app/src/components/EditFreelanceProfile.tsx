@@ -22,6 +22,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { motion } from "framer-motion";
+import { Skeleton } from "./Skeleton";
 
 const portfolioProjectSchema = z.object({
   id: z.string().optional(),

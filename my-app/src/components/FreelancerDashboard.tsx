@@ -1,5 +1,5 @@
+// app/components/FreelancerDashboard.tsx
 "use client";
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -21,6 +21,7 @@ import Logout from "@/components/Logout";
 import ProjectList from "./ProjectsList";
 import ProposalList from "./ProposalsList";
 import PortfolioSection from "./PortfolioSection";
+import AllProjects from "./AllProjects";
 
 interface FreelancerDashboardProps {
   user: any;
@@ -56,7 +57,6 @@ export default function FreelancerDashboard({
         }
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
-        // Handle error (e.g., show an error message to the user)
       }
     };
 
@@ -130,9 +130,10 @@ export default function FreelancerDashboard({
       >
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="projects">Projects</TabsTrigger>
-          <TabsTrigger value="proposals">Proposals</TabsTrigger>
+          <TabsTrigger value="projects">My Projects</TabsTrigger>
+          <TabsTrigger value="proposals">My Proposals</TabsTrigger>
           <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
+          <TabsTrigger value="all-projects">All Projects</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="space-y-4">
@@ -222,32 +223,15 @@ export default function FreelancerDashboard({
           <motion.div variants={cardVariants}>
             <Card>
               <CardHeader>
-                <CardTitle>Find New Projects</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="mb-4">
-                  Discover new opportunities that match your skills and
-                  interests.
-                </p>
-                <Link href="/projects/search">
-                  <Button className="w-full sm:w-auto">
-                    <SearchIcon className="mr-2 h-4 w-4" /> Search Projects
-                  </Button>
-                </Link>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div variants={cardVariants}>
-            <Card>
-              <CardHeader>
                 <CardTitle>Your Skills</CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-wrap gap-2">
-                  {user.freelancer?.skills.map((skill: any, index: any) => (
-                    <Badge key={index}>{skill}</Badge>
-                  ))}
+                  {user.freelancer?.skills.map(
+                    (skill: string, index: number) => (
+                      <Badge key={index}>{skill}</Badge>
+                    )
+                  )}
                 </div>
               </CardContent>
             </Card>
@@ -269,7 +253,7 @@ export default function FreelancerDashboard({
         </TabsContent>
 
         <TabsContent value="projects">
-          <ProjectList projects={dashboardData.projects} />
+          <ProjectList projects={dashboardData.projects} isClientView={false} />
         </TabsContent>
 
         <TabsContent value="proposals">
@@ -281,6 +265,10 @@ export default function FreelancerDashboard({
             portfolio={dashboardData.portfolio}
             onPortfolioUpdate={handlePortfolioUpdate}
           />
+        </TabsContent>
+
+        <TabsContent value="all-projects">
+          <AllProjects />
         </TabsContent>
       </Tabs>
     </motion.div>

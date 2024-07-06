@@ -1,21 +1,65 @@
+import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
-export default function ProjectList({ projects }: any) {
+interface Project {
+  id: string;
+  title: string;
+  status: string;
+  budget: number;
+  proposals: number;
+  description?: string;
+  skills?: string[];
+}
+
+interface ProjectListProps {
+  projects: Project[];
+  isClientView: boolean;
+}
+
+export default function ProjectList({
+  projects,
+  isClientView,
+}: ProjectListProps) {
   return (
     <div className="space-y-4">
-      <h2 className="text-2xl font-bold">Your Projects</h2>
-      {projects.map((project: any) => (
+      {projects.map((project) => (
         <Card key={project.id}>
           <CardHeader>
             <CardTitle>{project.title}</CardTitle>
           </CardHeader>
           <CardContent>
+            {project.description && (
+              <p className="mb-2">{project.description}</p>
+            )}
             <div className="flex justify-between items-center">
-              <Badge>{project.status}</Badge>
-              <span>
-                Deadline: {new Date(project.deadline).toLocaleDateString()}
-              </span>
+              <div>
+                <p>Status: {project.status}</p>
+                <p>Budget: ${project.budget}</p>
+                {isClientView && <p>Proposals: {project.proposals}</p>}
+              </div>
+              <div>
+                {project.skills && (
+                  <div className="space-x-2 mb-2">
+                    {project.skills.map((skill, index) => (
+                      <Badge key={index}>{skill}</Badge>
+                    ))}
+                  </div>
+                )}
+                <Link href={`/projects/${project.id}`}>
+                  <Button>
+                    {isClientView ? "View Proposals" : "View Details"}
+                  </Button>
+                </Link>
+                {!isClientView && (
+                  <Link href={`/projects/${project.id}/proposal`}>
+                    <Button variant="outline" className="ml-2">
+                      Send Proposal
+                    </Button>
+                  </Link>
+                )}
+              </div>
             </div>
           </CardContent>
         </Card>

@@ -136,6 +136,7 @@ model Project {
   clientProfile   ClientProfile @relation(fields: [clientProfileId], references: [id])
   budget          Float
   deadline        DateTime?
+  deliveryTime    Int  
   status          ProjectStatus @default(OPEN)
   category        String
   skills          String[]
