@@ -91,6 +91,7 @@ export async function GET(req: Request) {
         projectTitle: proposal.project.title,
         status: proposal.status,
         bidAmount: proposal.bidAmount,
+        deliveryTime: proposal.deliveryTime,
       })),
       portfolio:
         user.freelancer?.portfolio?.projects.map((project) => ({

@@ -20,6 +20,7 @@ import Logout from "@/components/Logout";
 import ProjectList from "./ProjectsList";
 import FreelancerList from "./FreelancerList";
 import CreateProject from "./CreateProject";
+import ProposalManagement from "./ProposalManagement";
 
 interface ClientDashboardProps {
   user: any;
@@ -73,6 +74,7 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
       }}
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
     >
+      {/* User Info Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div className="flex items-center mb-4 md:mb-0">
           <Avatar className="h-20 w-20 mr-4">
@@ -108,6 +110,7 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
         </div>
       </div>
 
+      {/* Dashboard Tabs */}
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -118,8 +121,10 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
           <TabsTrigger value="projects">My Projects</TabsTrigger>
           <TabsTrigger value="create-project">Create Project</TabsTrigger>
           <TabsTrigger value="freelancers">Freelancers</TabsTrigger>
+          <TabsTrigger value="proposals">Proposals</TabsTrigger>
         </TabsList>
 
+        {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <motion.div variants={cardVariants}>
@@ -222,16 +227,24 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
           </motion.div>
         </TabsContent>
 
+        {/* Projects Tab */}
         <TabsContent value="projects">
           <ProjectList projects={dashboardData.projects} isClientView={true} />
         </TabsContent>
 
+        {/* Create Project Tab */}
         <TabsContent value="create-project">
           <CreateProject />
         </TabsContent>
 
+        {/* Freelancers Tab */}
         <TabsContent value="freelancers">
           <FreelancerList freelancers={dashboardData.freelancers} />
+        </TabsContent>
+
+        {/* Proposals Tab */}
+        <TabsContent value="proposals">
+          <ProposalManagement projects={dashboardData.projects} />
         </TabsContent>
       </Tabs>
     </motion.div>

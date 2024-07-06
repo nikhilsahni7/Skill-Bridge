@@ -93,9 +93,6 @@ export default function ProjectDetailsPage({
               ))}
             </div>
           </div>
-          <Link href={`/projects/${project.id}/propose`}>
-            <Button>Submit Proposal</Button>
-          </Link>
         </CardContent>
       </Card>
     </div>

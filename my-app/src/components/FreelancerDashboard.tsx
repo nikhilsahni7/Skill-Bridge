@@ -88,6 +88,7 @@ export default function FreelancerDashboard({
       }}
       className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8"
     >
+      {/* User Info Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
         <div className="flex items-center mb-4 md:mb-0">
           <Avatar className="h-20 w-20 mr-4">
@@ -123,6 +124,7 @@ export default function FreelancerDashboard({
         </div>
       </div>
 
+      {/* Dashboard Tabs */}
       <Tabs
         value={activeTab}
         onValueChange={setActiveTab}
@@ -136,6 +138,7 @@ export default function FreelancerDashboard({
           <TabsTrigger value="all-projects">All Projects</TabsTrigger>
         </TabsList>
 
+        {/* Overview Tab */}
         <TabsContent value="overview" className="space-y-4">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <motion.div variants={cardVariants}>
@@ -252,14 +255,17 @@ export default function FreelancerDashboard({
           </motion.div>
         </TabsContent>
 
+        {/* Projects Tab */}
         <TabsContent value="projects">
           <ProjectList projects={dashboardData.projects} isClientView={false} />
         </TabsContent>
 
+        {/* Proposals Tab */}
         <TabsContent value="proposals">
           <ProposalList proposals={dashboardData.proposals} />
         </TabsContent>
 
+        {/* Portfolio Tab */}
         <TabsContent value="portfolio">
           <PortfolioSection
             portfolio={dashboardData.portfolio}
@@ -267,6 +273,7 @@ export default function FreelancerDashboard({
           />
         </TabsContent>
 
+        {/* All Projects Tab */}
         <TabsContent value="all-projects">
           <AllProjects />
         </TabsContent>

@@ -13,6 +13,7 @@ export default function ProposalList({ proposals }: any) {
           <CardContent>
             <div className="flex justify-between items-center">
               <Badge>{proposal.status}</Badge>
+              <span>Delivery Time: {proposal.deliveryTime} days</span>
               <span>Bid Amount: ${proposal.bidAmount}</span>
             </div>
           </CardContent>

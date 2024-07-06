@@ -49,7 +49,7 @@ export default function ProjectList({
                 )}
                 <Link href={`/projects/${project.id}`}>
                   <Button>
-                    {isClientView ? "View Proposals" : "View Details"}
+                    {isClientView ? "View Details" : "View Details"}
                   </Button>
                 </Link>
                 {!isClientView && (
