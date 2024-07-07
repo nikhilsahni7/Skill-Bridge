@@ -8,53 +8,97 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useToast } from "@/components/ui/use-toast";
+import { Toaster } from "@/components/ui/toaster";
 import {
   BuildingIcon,
   BriefcaseIcon,
   MapPinIcon,
   PhoneIcon,
   GlobeIcon,
-  PlusCircleIcon,
 } from "lucide-react";
 import Logout from "@/components/Logout";
 import ProjectList from "./ProjectsList";
 import FreelancerList from "./FreelancerList";
 import CreateProject from "./CreateProject";
 import ProposalManagement from "./ProposalManagement";
+import ActiveProjectsManagement from "./ActiveProjectMangement";
 
 interface ClientDashboardProps {
   user: any;
 }
 
+interface DashboardData {
+  activeProjects: number;
+  totalProjects: number;
+  projects: Project[];
+  freelancers: Freelancer[];
+}
+
+interface Project {
+  id: string;
+  title: string;
+  status: string;
+  budget: number;
+  proposals: number;
+  freelancer?: {
+    id: string;
+    name: string;
+  } | null;
+}
+
+interface Freelancer {
+  id: string;
+  name: string;
+  title: string;
+  skills: string[];
+  hourlyRate: number;
+  image: string;
+}
+
 export default function ClientDashboard({ user }: ClientDashboardProps) {
   const [activeTab, setActiveTab] = useState("overview");
-  const [dashboardData, setDashboardData] = useState({
+  const [dashboardData, setDashboardData] = useState<DashboardData>({
     activeProjects: 0,
     totalProjects: 0,
     projects: [],
     freelancers: [],
   });
+  const { toast } = useToast();
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const response = await fetch("/api/client/dashboard");
-        if (!response.ok) {
-          throw new Error("Failed to fetch dashboard data");
-        }
-        const { success, data } = await response.json();
-        if (success) {
-          setDashboardData(data);
-        } else {
-          throw new Error("Failed to fetch dashboard data");
-        }
-      } catch (error) {
-        console.error("Error fetching dashboard data:", error);
-      }
-    };
-
     fetchDashboardData();
   }, []);
+
+  const fetchDashboardData = async () => {
+    try {
+      const response = await fetch("/api/client/dashboard");
+      if (!response.ok) {
+        throw new Error("Failed to fetch dashboard data");
+      }
+      const { success, data } = await response.json();
+      if (success) {
+        setDashboardData(data);
+      } else {
+        throw new Error("Failed to fetch dashboard data");
+      }
+    } catch (error) {
+      console.error("Error fetching dashboard data:", error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch dashboard data. Please try again.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const handleProjectComplete = () => {
+    fetchDashboardData(); // Refresh dashboard data after project completion
+    toast({
+      title: "Success",
+      description: "Project marked as completed successfully.",
+    });
+  };
 
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
@@ -119,6 +163,7 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
         <TabsList>
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="projects">My Projects</TabsTrigger>
+          <TabsTrigger value="active-projects">Active Projects</TabsTrigger>
           <TabsTrigger value="create-project">Create Project</TabsTrigger>
           <TabsTrigger value="freelancers">Freelancers</TabsTrigger>
           <TabsTrigger value="proposals">Proposals</TabsTrigger>
@@ -232,6 +277,16 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
           <ProjectList projects={dashboardData.projects} isClientView={true} />
         </TabsContent>
 
+        {/* Active Projects Tab */}
+        <TabsContent value="active-projects">
+          <ActiveProjectsManagement
+            projects={dashboardData.projects.filter(
+              (project) => project.status === "IN_PROGRESS"
+            )}
+            onProjectComplete={handleProjectComplete}
+          />
+        </TabsContent>
+
         {/* Create Project Tab */}
         <TabsContent value="create-project">
           <CreateProject />
@@ -247,6 +302,8 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
           <ProposalManagement projects={dashboardData.projects} />
         </TabsContent>
       </Tabs>
+
+      <Toaster />
     </motion.div>
   );
 }

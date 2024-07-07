@@ -14,7 +14,17 @@ export async function GET(req: NextRequest) {
       where: { clientId: session.user.id },
       orderBy: { createdAt: "desc" },
       include: {
-        proposals: true,
+        proposals: {
+          where: { status: "ACCEPTED" },
+          include: {
+            freelancer: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
       },
     });
 
@@ -44,6 +54,7 @@ export async function GET(req: NextRequest) {
         status: project.status,
         budget: project.budget,
         proposals: project.proposals.length,
+        freelancer: project.proposals[0]?.freelancer || null,
       })),
       freelancers: freelancers.map((f) => ({
         id: f.userId,

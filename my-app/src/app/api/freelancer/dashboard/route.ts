@@ -11,7 +11,6 @@ export async function GET(req: Request) {
     }
 
     const userId = session.user.id;
-
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
@@ -29,6 +28,7 @@ export async function GET(req: Request) {
             project: {
               select: {
                 title: true,
+                status: true,
               },
             },
           },
@@ -47,29 +47,27 @@ export async function GET(req: Request) {
     const activeJobs = user.projects.filter(
       (project) => project.status === "IN_PROGRESS"
     ).length;
+
     const submittedProposals = user.proposals.length;
     const pendingProposals = user.proposals.filter(
       (proposal) => proposal.status === "PENDING"
     ).length;
 
-    const totalEarnings = await prisma.project.aggregate({
-      where: {
-        proposals: {
-          some: {
-            freelancerId: userId,
-            status: "ACCEPTED",
-          },
-        },
-        status: "COMPLETED",
-      },
-      _sum: {
-        budget: true,
-      },
-    });
+    const acceptedProposals = user.proposals.filter(
+      (proposal) =>
+        proposal.status === "ACCEPTED" &&
+        proposal.project.status === "COMPLETED"
+    );
+
+    const totalEarnings = acceptedProposals.reduce(
+      (sum, proposal) => sum + proposal.bidAmount,
+      0
+    );
 
     const completedProjects = user.projects.filter(
       (project) => project.status === "COMPLETED"
     ).length;
+
     const totalProjects = user.projects.length;
     const completionRate =
       totalProjects > 0 ? (completedProjects / totalProjects) * 100 : 0;
@@ -78,7 +76,8 @@ export async function GET(req: Request) {
       activeJobs,
       submittedProposals,
       pendingProposals,
-      totalEarnings: totalEarnings._sum.budget || 0,
+      totalEarnings,
+      completedProjects: user.freelancer?.completedProjects || 0,
       completionRate: Math.round(completionRate),
       projects: user.projects.map((project) => ({
         id: project.id,
@@ -89,6 +88,7 @@ export async function GET(req: Request) {
       proposals: user.proposals.map((proposal) => ({
         id: proposal.id,
         projectTitle: proposal.project.title,
+        projectStatus: proposal.project.status,
         status: proposal.status,
         bidAmount: proposal.bidAmount,
         deliveryTime: proposal.deliveryTime,

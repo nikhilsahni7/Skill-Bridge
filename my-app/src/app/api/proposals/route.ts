@@ -13,14 +13,48 @@ export async function POST(req: Request) {
     const { projectId, coverLetter, bidAmount, deliveryTime } =
       await req.json();
 
+    // Validate input
+    if (
+      !projectId ||
+      !coverLetter ||
+      isNaN(parseFloat(bidAmount)) ||
+      isNaN(parseInt(deliveryTime))
+    ) {
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    }
+
+    // Check project status
+    const project = await prisma.project.findUnique({
+      where: { id: projectId },
+    });
+
+    if (!project) {
+      return NextResponse.json({ error: "Project not found" }, { status: 404 });
+    }
+
+    if (project.status === "COMPLETED") {
+      return NextResponse.json(
+        { error: "Cannot submit proposal for a completed project" },
+        { status: 400 }
+      );
+    }
+
     const newProposal = await prisma.proposal.create({
       data: {
-        projectId,
-        freelancerId: session.user.id,
         coverLetter,
         bidAmount: parseFloat(bidAmount),
         deliveryTime: parseInt(deliveryTime),
         status: "PENDING",
+        freelancer: {
+          connect: { id: session.user.id },
+        },
+        project: {
+          connect: { id: projectId },
+        },
+      },
+      include: {
+        project: true,
+        freelancer: true,
       },
     });
 
