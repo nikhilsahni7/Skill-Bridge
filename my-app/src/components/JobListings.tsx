@@ -1,6 +1,6 @@
 // app/components/JobListings.tsx
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -31,6 +31,7 @@ interface Job {
       description: string;
     };
   };
+  viewDetails?: boolean;
 }
 
 export default function JobListings() {
@@ -40,12 +41,9 @@ export default function JobListings() {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
+  const [userType, setUserType] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetchJobs();
-  }, [status, page, searchTerm]);
-
-  const fetchJobs = async () => {
+  const fetchJobs = useCallback(async () => {
     try {
       setLoading(true);
       const response = await fetch(
@@ -55,6 +53,7 @@ export default function JobListings() {
         const data = await response.json();
         setJobs(data.jobs);
         setTotalPages(data.totalPages);
+        setUserType(data.userType);
       } else {
         throw new Error("Failed to fetch jobs");
       }
@@ -63,7 +62,11 @@ export default function JobListings() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, searchTerm, status]);
+
+  useEffect(() => {
+    fetchJobs();
+  }, [fetchJobs]);
 
   const handleStatusChange = (value: string) => {
     setStatus(value);
@@ -126,9 +129,11 @@ export default function JobListings() {
                 >
                   {job.status}
                 </Badge>
-                <Link href={`/jobs/${job.id}`}>
-                  <Button>View Details</Button>
-                </Link>
+                {job.viewDetails && (
+                  <Link href={`/jobs/${job.id}`}>
+                    <Button>View Details</Button>
+                  </Link>
+                )}
               </div>
             </div>
           </CardContent>

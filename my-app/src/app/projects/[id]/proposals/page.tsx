@@ -176,7 +176,7 @@ export default function SubmitProposal({ params }: { params: { id: string } }) {
           </div>
           <div>
             <label htmlFor="bidAmount" className="block mb-2">
-              Bid Amount ($)
+              Bid Amount ($) --10% Will be deducted from the bid amount
             </label>
             <Input
               type="number"

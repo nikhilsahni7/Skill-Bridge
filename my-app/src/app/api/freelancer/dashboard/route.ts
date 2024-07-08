@@ -1,4 +1,3 @@
-// app/api/freelancer/dashboard/route.ts
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
@@ -9,8 +8,8 @@ export async function GET(req: Request) {
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
-
     const userId = session.user.id;
+
     const user = await prisma.user.findUnique({
       where: { id: userId },
       include: {
@@ -33,7 +32,6 @@ export async function GET(req: Request) {
             },
           },
         },
-        projects: true,
       },
     });
 
@@ -44,9 +42,16 @@ export async function GET(req: Request) {
       );
     }
 
-    const activeJobs = user.projects.filter(
-      (project) => project.status === "IN_PROGRESS"
-    ).length;
+    // Fetch active jobs (proposals accepted and project in progress)
+    const activeJobs = await prisma.proposal.count({
+      where: {
+        freelancerId: userId,
+        status: "ACCEPTED",
+        project: {
+          status: "IN_PROGRESS",
+        },
+      },
+    });
 
     const submittedProposals = user.proposals.length;
     const pendingProposals = user.proposals.filter(
@@ -64,26 +69,61 @@ export async function GET(req: Request) {
       0
     );
 
-    const completedProjects = user.projects.filter(
-      (project) => project.status === "COMPLETED"
-    ).length;
+    const completedProjects = await prisma.proposal.count({
+      where: {
+        freelancerId: userId,
+        status: "ACCEPTED",
+        project: {
+          status: "COMPLETED",
+        },
+      },
+    });
 
-    const totalProjects = user.projects.length;
+    const totalProjects = await prisma.proposal.count({
+      where: {
+        freelancerId: userId,
+        status: "ACCEPTED",
+      },
+    });
+
     const completionRate =
       totalProjects > 0 ? (completedProjects / totalProjects) * 100 : 0;
+
+    // Fetch projects where the freelancer's proposal was accepted
+    const projects = await prisma.project.findMany({
+      where: {
+        proposals: {
+          some: {
+            freelancerId: userId,
+            status: "ACCEPTED",
+          },
+        },
+      },
+      include: {
+        proposals: {
+          where: {
+            freelancerId: userId,
+          },
+        },
+      },
+    });
 
     const dashboardData = {
       activeJobs,
       submittedProposals,
       pendingProposals,
       totalEarnings,
-      completedProjects: user.freelancer?.completedProjects || 0,
+      completedProjects,
       completionRate: Math.round(completionRate),
-      projects: user.projects.map((project) => ({
+      projects: projects.map((project) => ({
         id: project.id,
         title: project.title,
         status: project.status,
         deadline: project.deadline,
+        budget: project.budget,
+        proposals: project.proposals.length,
+        description: project.description,
+        skills: project.skills,
       })),
       proposals: user.proposals.map((proposal) => ({
         id: proposal.id,

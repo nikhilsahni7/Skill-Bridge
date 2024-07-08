@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
 import {
   Select,
   SelectContent,
@@ -78,9 +77,9 @@ export default function FreelancerProfilePage() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg"
+      className="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
     >
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
         Complete Your Freelancer Profile
       </h1>
       <Form {...form}>
@@ -94,7 +93,7 @@ export default function FreelancerProfilePage() {
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:border-blue-500 dark:text-gray-100"
                   />
                 </FormControl>
                 <FormMessage />
@@ -116,7 +115,7 @@ export default function FreelancerProfilePage() {
                         e.target.value.split(",").map((skill) => skill.trim())
                       )
                     }
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:border-blue-500 dark:text-gray-100"
                   />
                 </FormControl>
                 <FormMessage />
@@ -157,7 +156,7 @@ export default function FreelancerProfilePage() {
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:border-blue-500 dark:text-gray-100"
                   />
                 </FormControl>
                 <FormMessage />
@@ -181,7 +180,7 @@ export default function FreelancerProfilePage() {
                         e.target.value.split(",").map((cert) => cert.trim())
                       )
                     }
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:border-blue-500 dark:text-gray-100"
                   />
                 </FormControl>
                 <FormMessage />
@@ -200,7 +199,7 @@ export default function FreelancerProfilePage() {
                     type="number"
                     min="1"
                     step="0.01"
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-700 dark:focus:border-blue-500 dark:text-gray-100"
                   />
                 </FormControl>
                 <FormMessage />
@@ -236,7 +235,7 @@ export default function FreelancerProfilePage() {
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700"
+            className="w-full bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300"
           >
             {isLoading ? "Saving..." : "Save Profile"}
           </Button>

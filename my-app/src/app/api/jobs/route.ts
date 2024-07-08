@@ -1,13 +1,22 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
-import { ProjectStatus, Prisma } from "@prisma/client";
+import { ProjectStatus, Prisma, UserType } from "@prisma/client";
 
 export async function GET(req: Request) {
   try {
     const session = await auth();
     if (!session?.user?.id) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { id: session.user.id },
+      select: { userType: true },
+    });
+
+    if (!user) {
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     const { searchParams } = new URL(req.url);
@@ -17,11 +26,9 @@ export async function GET(req: Request) {
     const search = searchParams.get("search") || "";
 
     const where: Prisma.ProjectWhereInput = {};
-
     if (status && status !== "all") {
       where.status = status.toUpperCase() as ProjectStatus;
     }
-
     if (search) {
       where.OR = [
         { title: { contains: search, mode: "insensitive" } },
@@ -51,6 +58,8 @@ export async function GET(req: Request) {
         ...job.client,
         clientProfile: job.client.client,
       },
+
+      ...(user.userType === UserType.FREELANCER && { viewDetails: true }),
     }));
 
     return NextResponse.json({
@@ -58,6 +67,7 @@ export async function GET(req: Request) {
       jobs: transformedJobs,
       totalPages: Math.ceil(totalJobs / limit),
       currentPage: page,
+      userType: user.userType,
     });
   } catch (error) {
     console.error("Error fetching jobs:", error);

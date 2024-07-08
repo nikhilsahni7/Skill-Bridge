@@ -26,31 +26,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { doSocialLogin } from "@/lib";
 import {
   FaBriefcase,
   FaEnvelope,
   FaLock,
   FaUser,
   FaGoogle,
-  FaLinkedin,
-  FaGithub,
-  FaFacebook,
-  FaTwitter,
-  FaInstagram,
-  FaPinterest,
-  FaReddit,
-  FaTumblr,
-  FaWhatsapp,
-  FaYoutube,
-  FaSoundcloud,
-  FaSpotify,
-  FaApple,
-  FaWindows,
-  FaHandshake,
-  FaLinkedinIn,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
+import { doSocialLogin } from "@/lib";
 
 export const AuthForm = () => {
   const [error, setError] = useState("");
@@ -98,7 +82,7 @@ export const AuthForm = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-gray-50 dark:bg-gray-900">
       <div className="w-full max-w-md">
         <motion.div
           initial={{ y: -50, opacity: 0 }}
@@ -106,9 +90,13 @@ export const AuthForm = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-8"
         >
-          <FaBriefcase className="text-5xl text-blue-600 inline-block mb-4" />
-          <h1 className="text-4xl font-bold text-gray-800">SkillBridge</h1>
-          <p className="text-gray-600 mt-2">Connect. Collaborate. Create.</p>
+          <FaBriefcase className="text-5xl text-blue-600 dark:text-blue-400 inline-block mb-4" />
+          <h1 className="text-4xl font-bold text-gray-800 dark:text-gray-100">
+            SkillBridge
+          </h1>
+          <p className="text-gray-600 dark:text-white mt-2">
+            Connect. Collaborate. Create.
+          </p>
         </motion.div>
 
         <motion.div
@@ -116,12 +104,12 @@ export const AuthForm = () => {
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="w-full shadow-lg">
-            <CardHeader className="space-y-1 bg-white border-b p-6">
-              <CardTitle className="text-2xl font-bold text-center text-gray-800">
+          <Card className="w-full shadow-lg dark:bg-gray-800 dark:border-gray-700">
+            <CardHeader className="space-y-1 bg-white dark:bg-gray-800 dark:border-gray-700 border-b p-6">
+              <CardTitle className="text-2xl font-bold text-center text-gray-800 dark:text-gray-100">
                 {activeTab === "login" ? "Sign In" : "Create an Account"}
               </CardTitle>
-              <CardDescription className="text-center text-gray-600">
+              <CardDescription className="text-center text-gray-600 dark:text-white">
                 {activeTab === "login"
                   ? "Access your account"
                   : "Join our community of professionals"}
@@ -138,8 +126,8 @@ export const AuthForm = () => {
                     value="login"
                     className={`text-sm font-medium transition-all duration-300 ${
                       activeTab === "login"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-600"
+                        ? "bg-blue-600 text-white dark:bg-blue-400"
+                        : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-white"
                     }`}
                   >
                     Login
@@ -148,8 +136,8 @@ export const AuthForm = () => {
                     value="register"
                     className={`text-sm font-medium transition-all duration-300 ${
                       activeTab === "register"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-100 text-gray-600"
+                        ? "bg-blue-600 text-white dark:bg-blue-400"
+                        : "bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-white"
                     }`}
                   >
                     Register
@@ -174,7 +162,7 @@ export const AuthForm = () => {
                             name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel className="text-gray-700">
+                                <FormLabel className="text-gray-700 dark:text-gray-300">
                                   Email
                                 </FormLabel>
                                 <FormControl>
@@ -182,7 +170,7 @@ export const AuthForm = () => {
                                     <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                     <Input
                                       {...field}
-                                      className="pl-10 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                      className="pl-10 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                                       placeholder="Enter your email"
                                     />
                                   </div>
@@ -196,7 +184,7 @@ export const AuthForm = () => {
                             name="password"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel className="text-gray-700">
+                                <FormLabel className="text-gray-700 dark:text-gray-300">
                                   Password
                                 </FormLabel>
                                 <FormControl>
@@ -205,7 +193,7 @@ export const AuthForm = () => {
                                     <Input
                                       {...field}
                                       type="password"
-                                      className="pl-10 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                      className="pl-10 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-white"
                                       placeholder="Enter your password"
                                     />
                                   </div>
@@ -218,7 +206,7 @@ export const AuthForm = () => {
                             <motion.div
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative dark:bg-red-200 dark:border-red-500 dark:text-red-900"
                               role="alert"
                             >
                               <span className="block sm:inline">{error}</span>
@@ -227,7 +215,7 @@ export const AuthForm = () => {
                           <Button
                             disabled={isPending}
                             type="submit"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 dark:bg-blue-400 dark:hover:bg-blue-500"
                           >
                             Sign in
                           </Button>
@@ -236,42 +224,24 @@ export const AuthForm = () => {
                       <div className="mt-6 space-y-4">
                         <div className="relative">
                           <div className="absolute inset-0 flex items-center">
-                            <div className="w-full border-t border-gray-300"></div>
+                            <div className="w-full border-t border-gray-300 dark:border-gray-600" />
                           </div>
                           <div className="relative flex justify-center text-sm">
-                            <span className="px-2 bg-white text-gray-500">
+                            <span className="px-2 bg-white dark:bg-gray-800 text-gray-500 dark:text-white">
                               Or continue with
                             </span>
                           </div>
                         </div>
-                        <div className="mt-4 sm:mt-6">
+                        <div className="flex justify-center space-x-4">
                           <form action={doSocialLogin}>
                             <Button
                               variant="outline"
-                              className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium"
+                              className="w-full border border-gray-300 text-gray-700 dark:text-white-100 hover:bg-green-600  dark: bg-white font-medium "
                               name="action"
                               value="google"
                             >
                               <FaGoogle className="w-5 h-5 " />
                               Sign in with Google
-                            </Button>
-                            <Button
-                              variant="outline"
-                              className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium"
-                              name="action"
-                              value="linkedin"
-                            >
-                              <FaLinkedin className="w-5 h-5" />
-                              Sign in with Linkedin
-                            </Button>
-                            <Button
-                              variant="outline"
-                              className="w-full border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium"
-                              name="action"
-                              value="github"
-                            >
-                              <FaGithub className="w-5 h-5" />
-                              Sign in with Github
                             </Button>
                           </form>
                         </div>
@@ -288,7 +258,7 @@ export const AuthForm = () => {
                             name="name"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel className="text-gray-700">
+                                <FormLabel className="text-gray-700 dark:text-gray-300">
                                   Name
                                 </FormLabel>
                                 <FormControl>
@@ -296,8 +266,8 @@ export const AuthForm = () => {
                                     <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                     <Input
                                       {...field}
-                                      className="pl-10 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                      placeholder="Enter your full name"
+                                      className="pl-10 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-100"
+                                      placeholder="Enter your name"
                                     />
                                   </div>
                                 </FormControl>
@@ -310,7 +280,7 @@ export const AuthForm = () => {
                             name="email"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel className="text-gray-700">
+                                <FormLabel className="text-gray-700 dark:text-gray-300">
                                   Email
                                 </FormLabel>
                                 <FormControl>
@@ -318,7 +288,7 @@ export const AuthForm = () => {
                                     <FaEnvelope className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                                     <Input
                                       {...field}
-                                      className="pl-10 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+                                      className="pl-10 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-100"
                                       placeholder="Enter your email"
                                     />
                                   </div>
@@ -332,7 +302,7 @@ export const AuthForm = () => {
                             name="password"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel className="text-gray-700">
+                                <FormLabel className="text-gray-700 dark:text-gray-300">
                                   Password
                                 </FormLabel>
                                 <FormControl>
@@ -341,8 +311,8 @@ export const AuthForm = () => {
                                     <Input
                                       {...field}
                                       type="password"
-                                      className="pl-10 border-gray-300 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-                                      placeholder="Create a strong password"
+                                      className="pl-10 border-gray-300 dark:border-gray-600 focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 dark:bg-gray-700 dark:text-gray-100"
+                                      placeholder="Enter your password"
                                       onChange={(e) => {
                                         field.onChange(e);
                                         checkPasswordStrength(e.target.value);
@@ -351,28 +321,48 @@ export const AuthForm = () => {
                                   </div>
                                 </FormControl>
                                 <FormMessage className="text-red-500" />
+                                <div className="mt-2">
+                                  <div className="flex justify-between">
+                                    <span className="text-gray-600 dark:text-gray-400 text-sm">
+                                      Password strength:
+                                    </span>
+                                    <span
+                                      className={`text-sm font-medium ${
+                                        passwordStrength < 40
+                                          ? "text-red-500"
+                                          : passwordStrength < 80
+                                          ? "text-yellow-500"
+                                          : "text-green-500"
+                                      }`}
+                                    >
+                                      {passwordStrength < 40
+                                        ? "Weak"
+                                        : passwordStrength < 80
+                                        ? "Medium"
+                                        : "Strong"}
+                                    </span>
+                                  </div>
+                                  <div className="relative w-full bg-gray-200 rounded h-2 dark:bg-gray-600">
+                                    <div
+                                      className={`h-2 rounded ${
+                                        passwordStrength < 40
+                                          ? "bg-red-500"
+                                          : passwordStrength < 80
+                                          ? "bg-yellow-500"
+                                          : "bg-green-500"
+                                      }`}
+                                      style={{ width: `${passwordStrength}%` }}
+                                    ></div>
+                                  </div>
+                                </div>
                               </FormItem>
                             )}
                           />
-                          <div className="mt-2">
-                            <div className="h-2 bg-gray-200 rounded-full">
-                              <div
-                                className="h-full rounded-full transition-all duration-300"
-                                style={{
-                                  width: `${passwordStrength}%`,
-                                  backgroundColor: `hsl(${passwordStrength}, 100%, 50%)`,
-                                }}
-                              ></div>
-                            </div>
-                            <p className="text-sm mt-1 text-gray-600">
-                              Password strength: {passwordStrength}%
-                            </p>
-                          </div>
                           {error && (
                             <motion.div
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
+                              className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative dark:bg-red-200 dark:border-red-500 dark:text-red-900"
                               role="alert"
                             >
                               <span className="block sm:inline">{error}</span>
@@ -382,7 +372,7 @@ export const AuthForm = () => {
                             <motion.div
                               initial={{ opacity: 0, y: -10 }}
                               animate={{ opacity: 1, y: 0 }}
-                              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative"
+                              className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative dark:bg-green-200 dark:border-green-500 dark:text-green-900"
                               role="alert"
                             >
                               <span className="block sm:inline">{success}</span>
@@ -391,9 +381,9 @@ export const AuthForm = () => {
                           <Button
                             disabled={isPending}
                             type="submit"
-                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300"
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition duration-300 dark:bg-blue-400 dark:hover:bg-blue-500"
                           >
-                            Create Account
+                            Register
                           </Button>
                         </form>
                       </Form>
@@ -403,24 +393,13 @@ export const AuthForm = () => {
               </Tabs>
               {/* Social Proof */}
               <div className="mt-6 text-center">
-                <p className="text-sm text-gray-600">
+                <p className="text-sm text-gray-600 dark:text-white">
                   Join over 100,000 professionals on SkillBridge!
                 </p>
               </div>
-              {/* Terms and Privacy Policy */}
-              <div className="mt-4 sm:mt-6 text-center">
-                <p className="text-xs text-gray-500">
-                  By signing up, you agree to our{" "}
-                  <a href="#" className="underline  hover:text-gray-300">
-                    Terms of Service
-                  </a>{" "}
-                  and{" "}
-                  <a href="#" className="underline  hover:text-gray-300">
-                    Privacy Policy
-                  </a>
-                  .
-                </p>
-              </div>
+              <footer className="mt-4 text-center text-sm text-muted-foreground  dark:text-white">
+                <p>Made with ❤️ by Nikhil Sahni</p>
+              </footer>
             </CardContent>
           </Card>
         </motion.div>
@@ -428,5 +407,3 @@ export const AuthForm = () => {
     </div>
   );
 };
-
-export default AuthForm;

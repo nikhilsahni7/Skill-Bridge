@@ -1,3 +1,4 @@
+// app/components/ProjectList.tsx
 import Link from "next/link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -11,6 +12,7 @@ interface Project {
   proposals: number;
   description?: string;
   skills?: string[];
+  deadline?: string;
 }
 
 interface ProjectListProps {
@@ -38,6 +40,7 @@ export default function ProjectList({
                 <p>Status: {project.status}</p>
                 <p>Budget: ${project.budget}</p>
                 {isClientView && <p>Proposals: {project.proposals}</p>}
+                {project.deadline && <p>Deadline: {project.deadline}</p>}
               </div>
               <div>
                 {project.skills && (

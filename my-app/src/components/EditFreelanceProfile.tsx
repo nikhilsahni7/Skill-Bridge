@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,7 +22,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { motion } from "framer-motion";
-import { Skeleton } from "./Skeleton";
 
 const portfolioProjectSchema = z.object({
   id: z.string().optional(),
@@ -51,6 +50,11 @@ export default function EditFreelancerProfileForm({
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }, []);
 
   const form = useForm<FreelancerProfileForm>({
     resolver: zodResolver(freelancerProfileSchema),
@@ -85,9 +89,9 @@ export default function EditFreelancerProfileForm({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg"
+      className="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
     >
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
         Edit Your Freelancer Profile
       </h1>
       <Form {...form}>
@@ -97,14 +101,16 @@ export default function EditFreelancerProfileForm({
             name="title"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Professional Title</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Professional Title
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -113,7 +119,9 @@ export default function EditFreelancerProfileForm({
             name="skills"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Skills (comma-separated)</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Skills (comma-separated)
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
@@ -123,10 +131,10 @@ export default function EditFreelancerProfileForm({
                         e.target.value.split(",").map((skill) => skill.trim())
                       )
                     }
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -135,23 +143,40 @@ export default function EditFreelancerProfileForm({
             name="experienceLevel"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Experience Level</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Experience Level
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                       <SelectValue placeholder="Select experience level" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="ENTRY">Entry</SelectItem>
-                    <SelectItem value="INTERMEDIATE">Intermediate</SelectItem>
-                    <SelectItem value="EXPERT">Expert</SelectItem>
+                  <SelectContent className="bg-white dark:bg-gray-700">
+                    <SelectItem
+                      value="ENTRY"
+                      className="text-gray-900 dark:text-white"
+                    >
+                      Entry
+                    </SelectItem>
+                    <SelectItem
+                      value="INTERMEDIATE"
+                      className="text-gray-900 dark:text-white"
+                    >
+                      Intermediate
+                    </SelectItem>
+                    <SelectItem
+                      value="EXPERT"
+                      className="text-gray-900 dark:text-white"
+                    >
+                      Expert
+                    </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -160,14 +185,16 @@ export default function EditFreelancerProfileForm({
             name="education"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Education (Optional)</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Education (Optional)
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -176,7 +203,7 @@ export default function EditFreelancerProfileForm({
             name="certifications"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
                   Certifications (comma-separated, optional)
                 </FormLabel>
                 <FormControl>
@@ -188,10 +215,10 @@ export default function EditFreelancerProfileForm({
                         e.target.value.split(",").map((cert) => cert.trim())
                       )
                     }
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -200,17 +227,19 @@ export default function EditFreelancerProfileForm({
             name="hourlyRate"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Hourly Rate ($)</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Hourly Rate ($)
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="number"
                     min="1"
                     step="0.01"
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -219,24 +248,46 @@ export default function EditFreelancerProfileForm({
             name="availability"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Availability</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Availability
+                </FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
-                    <SelectTrigger>
+                    <SelectTrigger className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
                       <SelectValue placeholder="Select availability" />
                     </SelectTrigger>
                   </FormControl>
-                  <SelectContent>
-                    <SelectItem value="FULL_TIME">Full Time</SelectItem>
-                    <SelectItem value="PART_TIME">Part Time</SelectItem>
-                    <SelectItem value="CONTRACT">Contract</SelectItem>
-                    <SelectItem value="HOURLY">Hourly</SelectItem>
+                  <SelectContent className="bg-white dark:bg-gray-700">
+                    <SelectItem
+                      value="FULL_TIME"
+                      className="text-gray-900 dark:text-white"
+                    >
+                      Full Time
+                    </SelectItem>
+                    <SelectItem
+                      value="PART_TIME"
+                      className="text-gray-900 dark:text-white"
+                    >
+                      Part Time
+                    </SelectItem>
+                    <SelectItem
+                      value="CONTRACT"
+                      className="text-gray-900 dark:text-white"
+                    >
+                      Contract
+                    </SelectItem>
+                    <SelectItem
+                      value="HOURLY"
+                      className="text-gray-900 dark:text-white"
+                    >
+                      Hourly
+                    </SelectItem>
                   </SelectContent>
                 </Select>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -245,13 +296,15 @@ export default function EditFreelancerProfileForm({
             name="portfolio"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Portfolio Projects</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Portfolio Projects
+                </FormLabel>
                 <FormControl>
                   <div className="space-y-4">
                     {(field.value || []).map((project, index) => (
                       <div
                         key={project.id || index}
-                        className="space-y-2 p-4 border rounded"
+                        className="space-y-2 p-4 border rounded dark:border-gray-600"
                       >
                         <Input
                           placeholder="Project Title"
@@ -261,7 +314,7 @@ export default function EditFreelancerProfileForm({
                             newPortfolio[index].title = e.target.value;
                             field.onChange(newPortfolio);
                           }}
-                          className="border-gray-300 focus:border-blue-500"
+                          className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                         />
                         <Input
                           placeholder="Project Description"
@@ -271,7 +324,7 @@ export default function EditFreelancerProfileForm({
                             newPortfolio[index].description = e.target.value;
                             field.onChange(newPortfolio);
                           }}
-                          className="border-gray-300 focus:border-blue-500"
+                          className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                         />
                         <Input
                           placeholder="Project URL or GitHub (optional)"
@@ -281,7 +334,7 @@ export default function EditFreelancerProfileForm({
                             newPortfolio[index].projectUrl = e.target.value;
                             field.onChange(newPortfolio);
                           }}
-                          className="border-gray-300 focus:border-blue-500"
+                          className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                         />
                         <Input
                           type="hidden"
@@ -297,6 +350,7 @@ export default function EditFreelancerProfileForm({
                             );
                             field.onChange(newPortfolio);
                           }}
+                          className="bg-red-500 hover:bg-red-600 text-white"
                         >
                           Remove Project
                         </Button>
@@ -312,18 +366,18 @@ export default function EditFreelancerProfileForm({
                       { title: "", description: "", projectUrl: "" },
                     ])
                   }
-                  className="mt-2"
+                  className="mt-2 bg-green-500 hover:bg-green-600 text-white"
                 >
                   Add Project
                 </Button>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 mt-4"
           >
             {isLoading ? "Updating..." : "Update Profile"}
           </Button>

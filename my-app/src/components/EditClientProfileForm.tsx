@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -35,6 +35,11 @@ export default function EditClientProfileForm({
 }) {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    setIsDarkMode(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  }, []);
 
   const form = useForm<ClientProfileForm>({
     resolver: zodResolver(clientProfileSchema),
@@ -66,9 +71,9 @@ export default function EditClientProfileForm({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="max-w-2xl mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg"
+      className="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg"
     >
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-white">
         Edit Your Client Profile
       </h1>
       <Form {...form}>
@@ -78,14 +83,16 @@ export default function EditClientProfileForm({
             name="companyName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Company Name
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -94,14 +101,16 @@ export default function EditClientProfileForm({
             name="industry"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Industry</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Industry
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -110,15 +119,17 @@ export default function EditClientProfileForm({
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Description</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Company Description
+                </FormLabel>
                 <FormControl>
                   <Textarea
                     {...field}
                     rows={4}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -127,15 +138,17 @@ export default function EditClientProfileForm({
             name="website"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Website (Optional)</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Website (Optional)
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="url"
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -144,14 +157,16 @@ export default function EditClientProfileForm({
             name="location"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Location</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Location
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
@@ -160,22 +175,24 @@ export default function EditClientProfileForm({
             name="phoneNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number</FormLabel>
+                <FormLabel className="text-gray-700 dark:text-gray-300">
+                  Phone Number
+                </FormLabel>
                 <FormControl>
                   <Input
                     {...field}
                     type="tel"
-                    className="border-gray-300 focus:border-blue-500"
+                    className="border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-blue-500"
                   />
                 </FormControl>
-                <FormMessage />
+                <FormMessage className="text-red-500" />
               </FormItem>
             )}
           />
           <Button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200"
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 mt-4"
           >
             {isLoading ? "Updating..." : "Update Profile"}
           </Button>

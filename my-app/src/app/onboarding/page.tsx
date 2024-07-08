@@ -43,10 +43,10 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
-      <div className="w-full max-w-4xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800 p-4">
+      <div className="w-full max-w-4xl bg-white dark:bg-gray-900 rounded-2xl shadow-2xl overflow-hidden">
         <div className="flex flex-col md:flex-row">
-          <div className="w-full md:w-1/2 bg-blue-600 p-8 text-white flex flex-col justify-center">
+          <div className="w-full md:w-1/2 bg-blue-600 dark:bg-gray-800 p-8 text-white flex flex-col justify-center">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -60,13 +60,13 @@ export default function OnboardingPage() {
               </p>
               <div className="space-y-4">
                 <div className="flex items-center">
-                  <div className="bg-blue-500 rounded-full p-2 mr-4">
+                  <div className="bg-blue-500 dark:bg-blue-700 rounded-full p-2 mr-4">
                     <FaBriefcase className="text-2xl" />
                   </div>
                   <p>Access top-tier talent or exciting projects</p>
                 </div>
                 <div className="flex items-center">
-                  <div className="bg-blue-500 rounded-full p-2 mr-4">
+                  <div className="bg-blue-500 dark:bg-blue-700 rounded-full p-2 mr-4">
                     <FaUserTie className="text-2xl" />
                   </div>
                   <p>Build your professional network</p>
@@ -74,14 +74,14 @@ export default function OnboardingPage() {
               </div>
             </motion.div>
           </div>
-          <div className="w-full md:w-1/2 p-8">
+          <div className="w-full md:w-1/2 p-8 bg-gray-50 dark:bg-gray-800">
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
               className="h-full flex flex-col justify-center"
             >
-              <h2 className="text-3xl font-bold mb-6 text-gray-800">
+              <h2 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
                 Choose Your Path
               </h2>
               <div className="space-y-4 mb-8">
@@ -91,8 +91,8 @@ export default function OnboardingPage() {
                   size="lg"
                   className={`w-full text-lg justify-start space-x-4 ${
                     userType === "CLIENT"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-700"
+                      ? "bg-blue-600 dark:bg-blue-500 text-white"
+                      : "text-gray-700 dark:text-gray-300"
                   }`}
                 >
                   <FaUserTie className="text-2xl" />
@@ -104,8 +104,8 @@ export default function OnboardingPage() {
                   size="lg"
                   className={`w-full text-lg justify-start space-x-4 ${
                     userType === "FREELANCER"
-                      ? "bg-blue-600 text-white"
-                      : "text-gray-700"
+                      ? "bg-blue-600 dark:bg-blue-500 text-white"
+                      : "text-gray-700 dark:text-gray-300"
                   }`}
                 >
                   <FaBriefcase className="text-2xl" />
@@ -116,11 +116,10 @@ export default function OnboardingPage() {
                 onClick={handleContinue}
                 disabled={!userType}
                 size="lg"
-                className="w-full text-lg bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300"
+                className="w-full text-lg bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300"
               >
                 Get Started
               </Button>
-              <Logout />
             </motion.div>
           </div>
         </div>
