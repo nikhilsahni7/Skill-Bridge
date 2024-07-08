@@ -25,7 +25,19 @@ export default async function DashboardPage() {
   if (user.userType === "CLIENT") {
     return <ClientDashboard user={user} />;
   } else if (user.userType === "FREELANCER") {
-    return <FreelancerDashboard user={user} />;
+    const freelancerUser = {
+      name: user.name || "",
+      image: user.image || "",
+      freelancer: user.freelancer
+        ? {
+            title: user.freelancer.title || "",
+            skills: user.freelancer.skills || [],
+            availability: user.freelancer.availability || "",
+          }
+        : undefined,
+    };
+
+    return <FreelancerDashboard user={freelancerUser} />;
   } else {
     redirect("/onboarding");
   }

@@ -44,7 +44,7 @@ export default function FreelancerList({ freelancers }: FreelancerListProps) {
               </div>
               <span>${freelancer.hourlyRate}/hr</span>
               <Link href={`/freelancers/${freelancer.id}`}>
-                <Button>View Profile</Button>
+                <Button>View Profile(Contact)</Button>
               </Link>
             </div>
           </CardContent>

@@ -23,9 +23,45 @@ export default async function EditProfilePage() {
   }
 
   if (user.userType === "CLIENT") {
-    return <EditClientProfileForm initialProfile={user.client} />;
+    if (!user.client) {
+      return <div>Client profile not found. Please contact support.</div>;
+    }
+
+    const clientProfile = {
+      companyName: user.client.companyName || "",
+      industry: user.client.industry || "",
+      description: user.client.description || "",
+      website: user.client.website || "",
+      location: user.client.location || "",
+      phoneNumber: user.client.phoneNumber || "",
+    };
+
+    return <EditClientProfileForm initialProfile={clientProfile} />;
   } else if (user.userType === "FREELANCER") {
-    return <EditFreelancerProfileForm initialProfile={user.freelancer} />;
+    if (!user.freelancer) {
+      return <div>Freelancer profile not found. Please contact support.</div>;
+    }
+
+    const freelancerProfile = {
+      title: user.freelancer.title,
+      skills: user.freelancer.skills,
+      experienceLevel: user.freelancer.experienceLevel as
+        | "ENTRY"
+        | "INTERMEDIATE"
+        | "EXPERT",
+      education: user.freelancer.education || undefined,
+      certifications: user.freelancer.certifications,
+      hourlyRate: user.freelancer.hourlyRate,
+      availability: user.freelancer.availability as
+        | "FULL_TIME"
+        | "PART_TIME"
+        | "CONTRACT"
+        | "HOURLY",
+
+      portfolio: [],
+    };
+
+    return <EditFreelancerProfileForm initialProfile={freelancerProfile} />;
   } else {
     redirect("/onboarding");
   }

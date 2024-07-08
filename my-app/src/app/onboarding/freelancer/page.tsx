@@ -80,7 +80,7 @@ export default function FreelancerProfilePage() {
       className="max-w-2xl mx-auto mt-10 p-6 bg-white dark:bg-gray-900 rounded-lg shadow-lg"
     >
       <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-100">
-        Complete Your Freelancer Profile
+        Complete Your Freelancer Profile (You can Edit later)
       </h1>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">

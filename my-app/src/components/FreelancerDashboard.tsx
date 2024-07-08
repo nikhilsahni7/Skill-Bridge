@@ -35,6 +35,7 @@ import {
   FaLinkedinIn,
 } from "react-icons/fa";
 import { FaSquareXTwitter } from "react-icons/fa6";
+import ChatList from "./ChatList";
 
 interface FreelancerDashboardProps {
   user: {
@@ -313,6 +314,13 @@ export default function FreelancerDashboard({
               Portfolio
             </TabsTrigger>
             <TabsTrigger
+              value="messages"
+              className="flex-grow text-xs sm:text-sm"
+            >
+              Messages
+            </TabsTrigger>
+
+            <TabsTrigger
               value="all-projects"
               className="flex-grow text-xs sm:text-sm"
             >
@@ -480,6 +488,10 @@ export default function FreelancerDashboard({
               portfolio={dashboardData.portfolio}
               onPortfolioUpdate={handlePortfolioUpdate}
             />
+          </TabsContent>
+          {/* messages */}
+          <TabsContent value="messages">
+            <ChatList />
           </TabsContent>
 
           {/* All Projects Tab */}

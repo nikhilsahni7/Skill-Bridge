@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Skeleton } from "@/components/Skeleton";
+import ChatModal from "@/components/ChatModal";
 
 interface FreelancerProfile {
   id: string;
@@ -44,6 +45,7 @@ export default function FreelancerProfilePage({
   const [freelancer, setFreelancer] = useState<FreelancerProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   useEffect(() => {
     const fetchFreelancer = async () => {
@@ -66,6 +68,9 @@ export default function FreelancerProfilePage({
     fetchFreelancer();
   }, [params.id]);
 
+  const handleContactFreelancer = () => {
+    setIsChatOpen(true);
+  };
   if (loading) {
     return <Skeleton />;
   }
@@ -138,7 +143,7 @@ export default function FreelancerProfilePage({
                   <Card key={project.id}>
                     <CardContent className="p-4">
                       <h4 className="font-semibold">{project.title}</h4>
-                      <p className="text-sm text-gray-600">
+                      <p className="text-sm text-gray-600 dark:text-white">
                         {project.description}
                       </p>
                       {project.projectUrl && (
@@ -158,11 +163,16 @@ export default function FreelancerProfilePage({
               </div>
             </div>
           )}
-          <Link href={`/messages/new?recipient=${freelancer.user.id}`}>
-            <Button>Contact Freelancer</Button>
-          </Link>
+
+          <Button onClick={handleContactFreelancer}>Contact Freelancer</Button>
         </CardContent>
       </Card>
+      <ChatModal
+        isOpen={isChatOpen}
+        onClose={() => setIsChatOpen(false)}
+        receiverId={freelancer.userId}
+        receiverName={freelancer.user.name}
+      />
     </div>
   );
 }
