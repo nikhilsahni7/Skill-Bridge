@@ -1,28 +1,26 @@
-// lib/socket.ts
-import { Server as SocketIOServer } from "socket.io";
-import { Server as NetServer } from "http";
+import { io, Socket } from "socket.io-client";
 
-export function initializeSocketIO(server: NetServer) {
-  const io = new SocketIOServer(server, {
+let socket: Socket;
+
+export const initializeSocket = () => {
+  socket = io(process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000", {
     path: "/api/socketio",
   });
 
-  io.on("connection", (socket) => {
-    console.log("New client connected");
-
-    socket.on("join", (userId) => {
-      socket.join(userId);
-    });
-
-    socket.on("sendMessage", (message) => {
-      socket.to(message.receiverId).emit("receiveMessage", message);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("Client disconnected");
-    });
+  socket.on("connect", () => {
+    console.log("Connected to Socket.IO server");
   });
 
-  (global as any).io = io;
-  return io;
-}
+  socket.on("disconnect", () => {
+    console.log("Disconnected from Socket.IO server");
+  });
+
+  return socket;
+};
+
+export const getSocket = () => {
+  if (!socket) {
+    throw new Error("Socket not initialized. Call initializeSocket first.");
+  }
+  return socket;
+};

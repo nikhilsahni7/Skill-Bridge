@@ -322,7 +322,7 @@ export default function FreelancerDashboard({
 
             <TabsTrigger
               value="all-projects"
-              className="flex-grow text-xs sm:text-sm"
+              className="flex-grow text-xs sm:text-sm  "
             >
               All Projects
             </TabsTrigger>
@@ -383,7 +383,7 @@ export default function FreelancerDashboard({
                     <div className="text-2xl font-bold">
                       $
                       {calculateNetEarnings(
-                        dashboardData.totalEarnings
+                        dashboardData.totalEarnings,
                       ).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -427,7 +427,7 @@ export default function FreelancerDashboard({
                         <Badge key={index} variant="secondary">
                           {skill}
                         </Badge>
-                      )
+                      ),
                     )}
                   </div>
                 </CardContent>

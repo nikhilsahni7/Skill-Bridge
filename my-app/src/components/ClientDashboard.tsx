@@ -67,6 +67,9 @@ interface Freelancer {
   skills: string[];
   hourlyRate: number;
   image: string;
+
+  completedProjects: number;
+  totalEarnings: number;
 }
 
 const socialMediaLinks = [

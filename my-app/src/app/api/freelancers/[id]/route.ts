@@ -1,7 +1,6 @@
-// app/api/freelancers/[id]/route.ts
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
-import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(
   req: NextRequest,
@@ -39,7 +38,44 @@ export async function GET(
       );
     }
 
-    return NextResponse.json(freelancer);
+    const reviews = await prisma.review.findMany({
+      where: { freelancerId: params.id },
+      include: {
+        project: {
+          select: {
+            title: true,
+          },
+        },
+        client: {
+          select: {
+            name: true,
+            image: true,
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    const averageRating =
+      reviews.length > 0
+        ? reviews.reduce((sum, review) => sum + review.rating, 0) /
+          reviews.length
+        : 0;
+
+    const response = {
+      ...freelancer,
+      user: {
+        ...freelancer.user,
+        email:
+          session.user.id === params.id ? freelancer.user.email : undefined,
+      },
+      reviews,
+      averageRating,
+    };
+
+    return NextResponse.json(response);
   } catch (error) {
     console.error("Error fetching freelancer:", error);
     return NextResponse.json(

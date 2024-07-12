@@ -17,7 +17,6 @@ export async function GET(req: NextRequest) {
           { receiverId: session.user.id, senderId: { not: session.user.id } },
         ],
       },
-      // ... rest of the query remains the same
 
       orderBy: {
         createdAt: "desc",

@@ -54,7 +54,8 @@ model User {
   freelancer    FreelancerProfile?
   projects      Project[]
   proposals     Proposal[]
-  reviews       Review[]
+  clientReviews    Review[] @relation("ClientReviews")
+  freelancerReviews Review[] @relation("FreelancerReviews")
   sentMessages  Message[] @relation("SentMessages")
   receivedMessages Message[] @relation("ReceivedMessages")
   
@@ -85,6 +86,7 @@ model ClientProfile {
   website       String?
   location      String?
   phoneNumber   String?
+  moneySpent  Float    @default(0)
   projectsPosted Project[]
 }
 
@@ -102,6 +104,7 @@ model FreelancerProfile {
   portfolio     Portfolio?
    totalEarnings     Float @default(0)
   completedProjects Int @default(0)
+  
 }
 
 model Portfolio {
@@ -143,6 +146,7 @@ model Project {
   category        String
   skills          String[]
   proposals       Proposal[]
+  review      Review?
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 }
@@ -175,9 +179,13 @@ enum ProposalStatus {
 }
 
 model Review {
-  id          String @id @default(cuid())
-  reviewerId  String
-  reviewer    User   @relation(fields: [reviewerId], references: [id])
+  id          String   @id @default(cuid())
+  projectId   String   @unique
+  project     Project  @relation(fields: [projectId], references: [id])
+  clientId    String
+  client      User     @relation("ClientReviews", fields: [clientId], references: [id])
+  freelancerId String
+  freelancer  User     @relation("FreelancerReviews", fields: [freelancerId], references: [id])
   rating      Int
   comment     String?
   createdAt   DateTime @default(now())

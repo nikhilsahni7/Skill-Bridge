@@ -1,4 +1,3 @@
-// app/freelancers/[id]/page.tsx
 "use client";
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -8,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Skeleton } from "@/components/Skeleton";
 import ChatModal from "@/components/ChatModal";
+import { DollarSignIcon, BriefcaseIcon } from "lucide-react";
 
 interface FreelancerProfile {
   id: string;
@@ -19,6 +19,8 @@ interface FreelancerProfile {
   certifications: string[];
   hourlyRate: number;
   availability: string;
+  completedProjects: number;
+  totalEarnings: number;
   user: {
     id: string;
     name: string;
@@ -71,16 +73,17 @@ export default function FreelancerProfilePage({
   const handleContactFreelancer = () => {
     setIsChatOpen(true);
   };
+
   if (loading) {
     return <Skeleton />;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="text-center text-red-500">{error}</div>;
   }
 
   if (!freelancer) {
-    return <div>Freelancer not found</div>;
+    return <div className="text-center">Freelancer not found</div>;
   }
 
   return (
@@ -106,8 +109,12 @@ export default function FreelancerProfilePage({
             <div>
               <strong>Experience Level:</strong> {freelancer.experienceLevel}
             </div>
-            <div>
-              <strong>Hourly Rate:</strong> ${freelancer.hourlyRate}/hour
+            <div className="flex items-center">
+              <strong>Hourly Rate:</strong>
+              <span className="ml-2 flex items-center">
+                <DollarSignIcon className="h-4 w-4 mr-1" />$
+                {freelancer.hourlyRate}/hour
+              </span>
             </div>
             <div>
               <strong>Availability:</strong> {freelancer.availability}
@@ -116,12 +123,25 @@ export default function FreelancerProfilePage({
               <strong>Education:</strong>{" "}
               {freelancer.education || "Not specified"}
             </div>
+            <div className="flex items-center">
+              <strong>Completed Projects:</strong>
+              <span className="ml-2 flex items-center">
+                <BriefcaseIcon className="h-4 w-4 mr-1" />
+                {freelancer.completedProjects}
+              </span>
+            </div>
+            <div>
+              <strong>Total Earnings:</strong> $
+              {freelancer.totalEarnings.toFixed(2)}
+            </div>
           </div>
           <div className="mb-4">
             <strong>Skills:</strong>
             <div className="flex flex-wrap gap-2 mt-2">
               {freelancer.skills.map((skill, index) => (
-                <Badge key={index}>{skill}</Badge>
+                <Badge key={index} variant="secondary">
+                  {skill}
+                </Badge>
               ))}
             </div>
           </div>
@@ -143,7 +163,7 @@ export default function FreelancerProfilePage({
                   <Card key={project.id}>
                     <CardContent className="p-4">
                       <h4 className="font-semibold">{project.title}</h4>
-                      <p className="text-sm text-gray-600 dark:text-white">
+                      <p className="text-sm text-gray-600 dark:text-gray-300">
                         {project.description}
                       </p>
                       {project.projectUrl && (

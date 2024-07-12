@@ -1,12 +1,10 @@
-// app/components/Chat.tsx
-"use client";
 import { useState, useEffect, useRef } from "react";
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import io from "socket.io-client";
 import { useTheme } from "next-themes";
+import { initializeSocket, getSocket } from "@/lib/socket";
 
 interface Message {
   id: string;
@@ -26,22 +24,20 @@ export default function Chat({ receiverId, receiverName }: ChatProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputMessage, setInputMessage] = useState("");
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const socketRef = useRef<any>();
   const { theme } = useTheme();
 
   useEffect(() => {
-    socketRef.current = io(
-      process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:3000"
-    );
-    socketRef.current.on("connect", () => {
-      console.log("Connected to Socket.IO server");
-      socketRef.current.emit("join", session?.user?.id);
-    });
-    socketRef.current.on("receiveMessage", (message: Message) => {
+    initializeSocket();
+    const socket = getSocket();
+
+    socket.emit("join", session?.user?.id);
+
+    socket.on("receiveMessage", (message: Message) => {
       setMessages((prevMessages) => [...prevMessages, message]);
     });
+
     return () => {
-      socketRef.current.disconnect();
+      socket.off("receiveMessage");
     };
   }, [session?.user?.id]);
 
@@ -81,7 +77,7 @@ export default function Chat({ receiverId, receiverName }: ChatProps) {
         const newMessage = await response.json();
         setMessages((prevMessages) => [...prevMessages, newMessage]);
         setInputMessage("");
-        socketRef.current.emit("sendMessage", newMessage);
+        getSocket().emit("sendMessage", newMessage);
       }
     } catch (error) {
       console.error("Error sending message:", error);

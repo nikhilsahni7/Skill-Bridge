@@ -3,7 +3,6 @@ import { auth } from "@/lib/auth";
 import prisma from "@/lib/db";
 import { NextRequest, NextResponse } from "next/server";
 import { Server as SocketIOServer } from "socket.io";
-import { Server as NetServer } from "http";
 
 export async function POST(req: NextRequest) {
   const session = await auth();
@@ -37,6 +36,8 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+// ... (rest of the file remains the same)
 
 export async function GET(req: NextRequest) {
   const session = await auth();
