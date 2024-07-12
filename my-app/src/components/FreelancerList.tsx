@@ -53,15 +53,6 @@ export default function FreelancerList({ freelancers }: FreelancerListProps) {
                 <DollarSignIcon className="h-4 w-4 mr-1" />$
                 {freelancer.hourlyRate}/hr
               </span>
-              <span className="text-sm text-muted-foreground flex items-center">
-                <BriefcaseIcon className="h-4 w-4 mr-1" />
-                {freelancer.completedProjects} completed
-              </span>
-            </div>
-            <div className="mb-4">
-              <p className="text-sm text-muted-foreground">
-                Total Earnings: ${freelancer?.totalEarnings?.toFixed(2) || 0}
-              </p>
             </div>
             <Link href={`/freelancers/${freelancer.id}`}>
               <Button className="w-full">View Profile</Button>
