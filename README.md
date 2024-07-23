@@ -1,4 +1,4 @@
-# [Skill-Bridge](https://skill-bridg.vercel.app/)
+imp# [Skill-Bridge](https://skill-bridg.vercel.app/)
 
 ## Description
 
@@ -53,10 +53,6 @@ NEXT_PUBLIC_FRONTEND_URL="http://localhost:3000"
 
    ```sh
    bun install
-   ```
-
-   
-
    ```
 
 ## Usage
