@@ -1,4 +1,4 @@
-imp# [Skill-Bridge](https://skill-bridg.vercel.app/)
+ [Skill-Bridge](https://skill-bridg.vercel.app/)
 
 ## Description
 
