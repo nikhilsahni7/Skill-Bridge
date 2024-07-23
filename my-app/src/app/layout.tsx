@@ -19,7 +19,7 @@ const fontSans = FontSans({
 export const metadata = {
   title: "Skill-Bridge",
   description:
-    "A website for people and freelancers to hire and work with each other in the world",
+    "A website for people and freelancers to hire and work with each other, get their work done and earn  money . ",
 };
 
 export default function RootLayout({
