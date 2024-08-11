@@ -471,7 +471,7 @@ export default function ClientDashboard({ user }: ClientDashboardProps) {
         <Toaster />
 
         <footer className="mt-8 text-center text-sm text-muted-foreground">
-          <p>Made with ❤️ by Nikhil Sahni</p>
+          <p>Made with ❤️ by Vishal Sharma</p>
           <p className="mt-2">© 2024 Client Dashboard. All rights reserved.</p>
         </footer>
       </motion.div>

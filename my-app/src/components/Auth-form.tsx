@@ -398,7 +398,7 @@ export const AuthForm = () => {
                 </p>
               </div>
               <footer className="mt-4 text-center text-sm text-muted-foreground  dark:text-white">
-                <p>Made with ❤️ by Nikhil Sahni</p>
+                <p>Made with ❤️ by Vishal Sharma</p>
               </footer>
             </CardContent>
           </Card>

@@ -383,7 +383,7 @@ export default function FreelancerDashboard({
                     <div className="text-2xl font-bold">
                       $
                       {calculateNetEarnings(
-                        dashboardData.totalEarnings,
+                        dashboardData.totalEarnings
                       ).toLocaleString(undefined, {
                         minimumFractionDigits: 2,
                         maximumFractionDigits: 2,
@@ -427,7 +427,7 @@ export default function FreelancerDashboard({
                         <Badge key={index} variant="secondary">
                           {skill}
                         </Badge>
-                      ),
+                      )
                     )}
                   </div>
                 </CardContent>
@@ -503,7 +503,7 @@ export default function FreelancerDashboard({
         <Toaster />
 
         <footer className="mt-8 text-center text-sm text-muted-foreground">
-          <p>Made with ❤️ by Nikhil Sahni</p>
+          <p>Made with ❤️ by Vishal Sharma</p>
           <p className="mt-2">
             © 2024 Freelancer Dashboard. All rights reserved.
           </p>
